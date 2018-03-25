@@ -54,21 +54,29 @@ export default {
     },
     data() {
         return {
-            center     : { lat : 1.359, lng : 103.818 },
-            terminals  : [],
-            activeTerm : {},
+            center              : { lat : 1.359, lng : 103.818 },
+            // pre-polutate due to slow server-response
+            terminals           : [
+                { "geoloc" : { "lng" : 103.870539, "lat" : 1.334283 }, "id" : 1 }, {
+                    "id"     : 2,
+                    "geoloc" : {
+                        "lng" : 103.870539,
+                        "lat" : 1.344283
+                    }
+                }, { "geoloc" : { "lng" : 103.870539, "lat" : 1.354283 }, "id" : 3 }],
+            activeTerm          : {},
             isLoadingActiveTerm : false,
         }
     },
     methods    : {
         async makeActive(terminal) {
             this.isLoadingActiveTerm = true;
-            const url = `/terminal/${terminal.id}`;
+            const url                = `/terminal/${terminal.id}`;
             try {
-                const res = await this.$http.get(url);
+                const res                = await this.$http.get(url);
                 this.isLoadingActiveTerm = false;
-                this.activeTerm = res.data;
-                this.center     = this.activeTerm.geoloc;
+                this.activeTerm          = res.data;
+                this.center              = this.activeTerm.geoloc;
             } catch {
                 this.activeTerm = {};
             }
@@ -76,8 +84,8 @@ export default {
         },
     },
     async created() {
-        const url = `/terminals`;
-        const res = await this.$http.get(url);
+        const url      = `/terminals`;
+        const res      = await this.$http.get(url);
         this.terminals = res.data;
     }
 }
@@ -88,7 +96,7 @@ export default {
 
 nav.navbar {
     background-color: #79c90d;
-    color: white;
+    color:            white;
 }
 
 div.main {
@@ -114,12 +122,12 @@ div.gmap-container {
 }
 
 .detail-body {
-    position: relative;
-    height: calc(100vh - 156px);
+    position:   relative;
+    height:     calc(100vh - 156px);
     overflow-y: auto;
 }
 
 .list-placeholder {
-    text-align : center;
+    text-align: center;
 }
 </style>

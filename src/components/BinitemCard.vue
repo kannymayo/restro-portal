@@ -3,15 +3,23 @@
     <figure class="media-left">
         <p class="image is-64x64" @click="isImageModalActive = true">
             <img :src="'data:image/jpeg;base64,'+imageBase64">
+            <strong>Item {{itemId}}</strong>
         </p>
     </figure>
     <div class="media-content">
         <div class="content">
-            <p>
-                <strong>Item {{itemId}}</strong>
-                <br>
-                Type: {{predictedType}}
-            </p>
+
+            <div v-if="Object.keys(predictedType).length !== 0">
+                <p>{{predictedType}}</p>
+                <b-icon v-if="predictedType === 'Mobile Phone (Electronic)'" icon="cellphone-android" size="is-small"></b-icon>
+                <b-icon v-if="predictedType === 'Keyboard (Electronic)'" icon="keyboard" size="is-small"></b-icon>
+                <b-icon v-if="predictedType === 'Beverage Can (Metal)'" icon="cup-water" size="is-small"></b-icon>
+                <b-icon v-if="predictedType === 'Bottle (Plastic)'" icon="bottle-wine" size="is-small"></b-icon>
+            </div>
+            <div v-else>
+                <p>Unsorted</p>
+                <b-icon icon="emoticon-sad" size="is-small"></b-icon>
+            </div>
         </div>
     </div>
     <div class="media-right">

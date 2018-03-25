@@ -70,4 +70,8 @@ export default {
     margin-bottom: auto;
     margin-left:   0;
 }
+
+.media-left > .image > img {
+    border-radius: 3px;
+}
 </style>

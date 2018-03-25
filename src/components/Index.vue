@@ -3,20 +3,14 @@
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="https://bulma.io">
-                <img src="https://i.pinimg.com/originals/07/93/a0/0793a045622b504943b975dd36c41da6.png" alt="Restro"
-                        width="40" height="40">
+                <img id="logo" src="../assets/restro-logo.jpg" alt="Restro"
+                        width="120" height="40">
             </a>
-
-            <div class="navbar-burger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
         </div>
     </nav>
 
     <div class="content tile is-ancestor">
-        <div class="tile is-8 gmap-container">
+        <div class="tile is-8 gmap-container is-parent">
             <gmap-map :center="center" :zoom="11" map-type-id="roadmap" style="flex: 1 0 auto">
                 <gmap-marker v-for="t in terminals" :position="t.geoloc" :clickable="true"
                         @click="makeActive(t)">
@@ -108,6 +102,26 @@ export default {
                             prediction  : 'bottle',
                             confirmed   : true,
                             imageBase64 : ''
+                        },
+                        23 : {
+                            prediction  : 'bottle',
+                            confirmed   : true,
+                            imageBase64 : ''
+                        },
+                        1230 : {
+                            prediction  : 'bottle',
+                            confirmed   : true,
+                            imageBase64 : ''
+                        },
+                        12032 : {
+                            prediction  : 'bottle',
+                            confirmed   : true,
+                            imageBase64 : ''
+                        },
+                        3847 : {
+                            prediction  : 'bottle',
+                            confirmed   : true,
+                            imageBase64 : ''
                         }
                     },
                     geoloc    : {
@@ -125,6 +139,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+nav.navbar {
+    background-color: #79c90d;
+    color: white;
+}
+
 div.main {
     min-height:     100vh;
     width:          100vw;

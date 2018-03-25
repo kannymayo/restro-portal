@@ -18,15 +18,20 @@
             </gmap-map>
         </div>
 
-        <div class="tile is-4 detail-pane is-vertical is-parent" v-if="Object.keys(activeTerm).length !== 0">
+        <div class="tile is-4 detail-pane is-vertical is-parent">
             <div class="detail-header">
                 <b-notification class="is-info" :closable="false">
-                    <p>Recycle bin {{activeTerm.id}}</p>
+                    <p>Recycle Terminal {{activeTerm.id}}</p>
                 </b-notification>
             </div>
             <div class="detail-body">
-                <binitem-card v-for="(item, itemId) in activeTerm.inventory" :itemId="itemId"
-                        :predictedType="item.prediction" :confirmed="item.confirmed">
+                <b-loading :is-full-page="false" :active="isLoadingActiveTerm"></b-loading>
+                <div class="list-placeholder" v-if="Object.keys(activeTerm).length === 0">
+                    Click on any recycle terimals to begin.
+                </div>
+                <binitem-card v-for="item in activeTerm.inventory" :itemId="item.id"
+                        :predictedType="item.prediction" :confirmed="item.confirmed === 1"
+                        :imageBase64="item.image">
                 </binitem-card>
             </div>
         </div>
@@ -36,6 +41,7 @@
 </template>
 
 <script>
+import configs from '../config';
 import BinitemCard from './BinitemCard';
 
 export default {
@@ -49,90 +55,30 @@ export default {
     data() {
         return {
             center     : { lat : 1.359, lng : 103.818 },
-            terminals  : [
-                {
-                    id        : 1,
-                    inventory : [
-                        {
-                            "count" : 2,
-                            "type"  : "bulb"
-                        },
-                        {
-                            "count" : 3,
-                            "type"  : "battery"
-                        },
-                        {
-                            "count" : 1,
-                            "type"  : "plastic-bottle"
-                        }
-                    ],
-                    geoloc    : { lat : 1.334283, lng : 103.870539 }
-                }, {
-                    id        : 1,
-                    inventory : [
-                        {
-                            "count" : 5,
-                            "type"  : "bulb"
-                        },
-                        {
-                            "count" : 2,
-                            "type"  : "battery"
-                        },
-                        {
-                            "count" : 3,
-                            "type"  : "plastic-bottle"
-                        }
-                    ],
-                    geoloc    : { lat : 1.316028, lng : 103.830556 }
-                }],
+            terminals  : [],
             activeTerm : {},
+            isLoadingActiveTerm : false,
         }
     },
     methods    : {
         async makeActive(terminal) {
-            const url = `localhost/terminal/${terminal.id}`;
-            let term = {};
+            this.isLoadingActiveTerm = true;
+            const url = `/terminal/${terminal.id}`;
             try {
-                term = await this.$http.get(url);
-            } finally {
-                this.activeTerm = Object.assign({
-                    id        : 21312,
-                    inventory : {
-                        123412 : {
-                            prediction  : 'bottle',
-                            confirmed   : true,
-                            imageBase64 : ''
-                        },
-                        23 : {
-                            prediction  : 'bottle',
-                            confirmed   : true,
-                            imageBase64 : ''
-                        },
-                        1230 : {
-                            prediction  : 'bottle',
-                            confirmed   : true,
-                            imageBase64 : ''
-                        },
-                        12032 : {
-                            prediction  : 'bottle',
-                            confirmed   : true,
-                            imageBase64 : ''
-                        },
-                        3847 : {
-                            prediction  : 'bottle',
-                            confirmed   : true,
-                            imageBase64 : ''
-                        }
-                    },
-                    geoloc    : {
-                        lat : 1.334283,
-                        lng : 103.870539,
-                    }
-                }, term);
+                const res = await this.$http.get(url);
+                this.isLoadingActiveTerm = false;
+                this.activeTerm = res.data;
                 this.center     = this.activeTerm.geoloc;
+            } catch {
+                this.activeTerm = {};
             }
 
         },
+    },
+    async created() {
+        const url = `/terminals`;
+        const res = await this.$http.get(url);
+        this.terminals = res.data;
     }
 }
 </script>
@@ -168,5 +114,12 @@ div.gmap-container {
 }
 
 .detail-body {
+    position: relative;
+    height: calc(100vh - 156px);
+    overflow-y: auto;
+}
+
+.list-placeholder {
+    text-align : center;
 }
 </style>

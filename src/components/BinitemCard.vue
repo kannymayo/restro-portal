@@ -10,7 +10,7 @@
             <p>
                 <strong>Item {{itemId}}</strong>
                 <br>
-                Predicted Type: {{predictedType}}
+                Type: {{predictedType}}
             </p>
         </div>
     </div>
